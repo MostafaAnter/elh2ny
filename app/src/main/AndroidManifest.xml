@@ -26,7 +26,36 @@
         <activity
             android:name=".activity.BaseActivity"
             android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SearchResultActivity"
+            android:label="@string/title_activity_search_result"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ArticlesActivity"
+            android:label="@string/title_activity_articles"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ArticlesDetailsActivity"
+            android:label="@string/title_activity_articles_details"
+            android:parentActivityName=".activity.ArticlesActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.elh2ny.activity.ArticlesActivity" />
+        </activity>
+        <activity
+            android:name=".activity.AdvicesActivity"
+            android:label="@string/title_activity_advices"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.CallUsActivity"
+            android:label="@string/title_activity_call_us"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
