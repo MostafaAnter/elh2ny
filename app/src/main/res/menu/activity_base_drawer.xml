@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/search"
+            android:icon="@drawable/ic_me_search"
+            android:title="إبحث عن حضانات" />
+        <item
+            android:id="@+id/articles"
+            android:icon="@drawable/ic_me_pen"
+            android:title="مقالات مختارة" />
+        <item
+            android:id="@+id/advices"
+            android:icon="@drawable/ic_me_about"
+            android:title="نصائح عامة" />
+        <item
+            android:id="@+id/call"
+            android:icon="@drawable/ic_me_call"
+            android:title="معلومات التواصل" />
+    </group>
+
+    <item android:title="أخرى">
+        <menu>
+            <item
+                android:id="@+id/exit"
+                android:icon="@drawable/ic_me_logout"
+                android:title="خروج" />
+        </menu>
+    </item>
+
+</menu>
