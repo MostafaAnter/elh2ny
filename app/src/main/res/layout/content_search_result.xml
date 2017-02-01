@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.elh2ny.activity.SearchResultActivity"
     tools:showIn="@layout/app_bar_search_result">
@@ -47,7 +47,7 @@
 
         <ProgressBar
             android:id="@+id/progressBar1"
-            style="?android:attr/progressBarStyleLarge"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
