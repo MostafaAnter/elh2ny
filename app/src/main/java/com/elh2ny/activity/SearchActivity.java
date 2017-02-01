@@ -1,5 +1,6 @@
 package com.elh2ny.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -55,6 +56,7 @@ public class SearchActivity extends BaseActivity
     @OnClick(R2.id.card_view1)
     public void goToSearchResultPage(CardView view) {
         Toast.makeText(this, "SearchResult", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, SearchResultActivity.class));
     }
 
     @Override

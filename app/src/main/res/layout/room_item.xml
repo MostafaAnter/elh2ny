@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
@@ -19,7 +20,8 @@
             android:layout_width="80dip"
             android:layout_height="80dip"
             card_view:srcCompat="@android:drawable/sym_def_app_icon"
-            android:id="@+id/imageView2"
+            android:id="@+id/imageView1"
+            android:tint="@color/colorPrimaryDark"
             android:scaleType="centerCrop"
             android:padding="5dp"/>
 
@@ -37,7 +39,8 @@
                 android:id="@+id/textView1"
                 android:textSize="18sp"
                 android:textStyle="normal|bold"
-                android:textAlignment="textStart" />
+                android:textAlignment="textStart"
+                tools:ignore="RtlCompat" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -49,22 +52,25 @@
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:id="@+id/textView2"
-                    android:maxLines="2"
+                    android:maxLines="1"
                     android:ellipsize="end"
                     android:textAlignment="textStart"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    tools:ignore="RtlCompat" />
 
                 <TextView
                     android:text="750 ج"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/textView"
+                    android:id="@+id/textView3"
                     android:textAlignment="viewEnd"
                     android:gravity="bottom"
                     android:padding="5dp"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_weight="0.1"
-                    style="@style/TextAppearance.AppCompat.Large" />
+                    android:textStyle="bold"
+                    style="@style/TextAppearance.AppCompat.Large"
+                    tools:ignore="RtlCompat" />
             </LinearLayout>
 
         </LinearLayout>
