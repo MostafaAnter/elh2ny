@@ -1,16 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_call_us"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_login"
     android:layout_width="match_parent"
+    android:layoutDirection="rtl"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.elh2ny.activity.CallUsActivity"
     tools:showIn="@layout/app_bar_call_us">
 
-</RelativeLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/inside" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@null"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_heart" />
+
+                <TextView
+                    android:id="@+id/text1"
+                    style="?android:attr/textAppearanceLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="تواصل معنا.."
+                    android:textColor="@color/text_color"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/linear1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@drawable/border_shape_gray"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="2dp"
+                        android:contentDescription="@null"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_person_black_24dp" />
+
+                    <EditText
+                        android:id="@+id/editText1"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#00000000"
+                        android:hint="الأسم"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textAlignment="viewStart"
+                        android:textSize="15sp"
+                        tools:ignore="RtlCompat" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@drawable/border_shape_gray"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="2dp"
+                        android:contentDescription="@null"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_assignment_black_24dp" />
+
+                    <EditText
+                        android:id="@+id/editText2"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="#00000000"
+                        android:hint="البريد الإلكتروني"
+                        android:inputType="phone"
+                        android:textAlignment="viewStart"
+                        android:textSize="15sp"
+                        tools:ignore="RtlCompat" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@drawable/border_shape_gray"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="2dp"
+                        android:contentDescription="@null"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_home_black_24dp" />
+
+                    <EditText
+                        android:id="@+id/editText3"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="#00000000"
+                        android:hint="عنوان الرسالة"
+                        android:inputType="textEmailAddress"
+                        android:textAlignment="viewStart"
+                        android:textSize="15sp"
+                        tools:ignore="RtlCompat" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@drawable/border_shape_gray"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:minHeight="?android:attr/listPreferredItemHeightLarge"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/editText4"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="#00000000"
+                        android:hint="الرسالة"
+                        android:inputType="textPassword"
+                        android:textAlignment="viewStart"
+                        android:textSize="15sp"
+                        tools:ignore="RtlCompat" />
+
+                </LinearLayout>
+                <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view1"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:foreground="?selectableItemBackground"
+                    card_view:cardBackgroundColor="@color/colorTint"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    card_view:cardCornerRadius="4dp"
+                    android:layout_marginBottom="2dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/text2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textColor="#FFF"
+                            android:text="إرسال"/>
+                        <ImageView
+                            android:contentDescription="@null"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:tint="#fff"
+                            android:src="@drawable/ic_pro_rate_arrow"
+                            android:layout_gravity="center_vertical"
+                            android:padding="4dp"
+                            android:background="@drawable/circle_shape_green"
+                            android:layout_margin="4dp"
+                            />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:foreground="?selectableItemBackground"
+                    card_view:cardCornerRadius="4dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:contentDescription="@null"
+                        android:padding="3dp"
+                        android:tint="@color/red_btn_bg_color"
+                        android:src="@drawable/ic_phone_black_24dp" />
+                </android.support.v7.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/contact"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:id="@+id/text14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end|center_vertical"
+                        android:text="معلومات التواصل"
+                        android:textColor="@color/colorTint" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/text15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end|center_vertical"
+                            android:text="العنوان : أسيوط جامعة أسيوط مركز شبكة المعلومات الدور السادس موبايل: 010895000999"
+                            android:textSize="12sp"
+                            android:textAlignment="textStart"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+    </FrameLayout>

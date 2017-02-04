@@ -1,5 +1,6 @@
 package com.elh2ny.activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -108,14 +109,29 @@ public class BaseActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.search) {
-            // Handle the camera action
+            if (!this.getClass().getSimpleName().equalsIgnoreCase("SearchActivity")){
+                startActivity(new Intent(this, SearchActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
         } else if (id == R.id.articles) {
+            if (!this.getClass().getSimpleName().equalsIgnoreCase("ArticlesActivity")){
+                startActivity(new Intent(this, ArticlesActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
 
         } else if (id == R.id.advices) {
+            if (!this.getClass().getSimpleName().equalsIgnoreCase("AdvicesActivity")){
+                startActivity(new Intent(this, AdvicesActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
 
         } else if (id == R.id.call) {
+            if (!this.getClass().getSimpleName().equalsIgnoreCase("CallUsActivity")){
+                startActivity(new Intent(this, CallUsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
 
         } else if (id == R.id.exit) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
 
         }
 

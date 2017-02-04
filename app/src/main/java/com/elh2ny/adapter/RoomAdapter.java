@@ -1,6 +1,10 @@
 package com.elh2ny.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,6 +68,21 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
+
+//                    mStackLevel++;
+//                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+//                    if (prev != null) {
+//                        ft.remove(prev);
+//                    }
+//                    ft.addToBackStack(null);
+//
+//                    // Create and show the dialog.
+//                    DialogFragment newFragment = MyDialogFragment.newInstance(mStackLevel);
+//                    Bundle bundle1 = new Bundle();
+//                    bundle1.putString("user_id", getArguments().getString(Constants.DETAIL_USER_ID));
+//                    newFragment.setArguments(bundle1);
+//                    newFragment.show(ft, "dialog");
                 }
             });
 
