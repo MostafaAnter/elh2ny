@@ -112,7 +112,7 @@
                         android:layout_height="35dp"
                         android:background="#00000000"
                         android:hint="البريد الإلكتروني"
-                        android:inputType="phone"
+                        android:inputType="textEmailAddress"
                         android:textAlignment="viewStart"
                         android:textSize="15sp"
                         tools:ignore="RtlCompat" />
@@ -144,7 +144,7 @@
                         android:layout_height="35dp"
                         android:background="#00000000"
                         android:hint="عنوان الرسالة"
-                        android:inputType="textEmailAddress"
+                        android:inputType="text"
                         android:textAlignment="viewStart"
                         android:textSize="15sp"
                         tools:ignore="RtlCompat" />
@@ -166,10 +166,12 @@
                     <EditText
                         android:id="@+id/editText4"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="match_parent"
                         android:background="#00000000"
                         android:hint="الرسالة"
-                        android:inputType="textPassword"
+                        android:layout_margin="5dp"
+                        android:inputType="text"
+                        android:gravity="top"
                         android:textAlignment="viewStart"
                         android:textSize="15sp"
                         tools:ignore="RtlCompat" />
@@ -218,6 +220,7 @@
                 </android.support.v7.widget.CardView>
 
             <LinearLayout
+                android:id="@+id/linear7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
