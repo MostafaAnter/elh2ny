@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.elh2ny.R;
 import com.elh2ny.R2;
 import com.elh2ny.adapter.ArticlesAdapter;
-import com.elh2ny.model.ArticlesResponseModel.Datum;
+import com.elh2ny.model.articlesResponseModel.Datum;
 import com.elh2ny.utility.Util;
 
 import java.util.ArrayList;

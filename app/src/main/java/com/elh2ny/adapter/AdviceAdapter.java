@@ -6,14 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.elh2ny.R;
 import com.elh2ny.R2;
-import com.elh2ny.model.AdviceModel;
-import com.elh2ny.model.RoomModel;
+import com.elh2ny.model.advicesResponceModel.AdviceModel;
 import com.elh2ny.utility.Util;
 
 import java.util.List;
