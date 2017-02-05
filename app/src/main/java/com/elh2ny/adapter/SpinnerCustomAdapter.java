@@ -69,10 +69,10 @@ public class SpinnerCustomAdapter extends ArrayAdapter {
 
         if (position == 0) {
 
-            label.setText(mDataset.get(position).getLabel());
+            label.setText(mDataset.get(position).gettitle());
             label.setTextColor(Color.DKGRAY);
         } else {
-            label.setText(mDataset.get(position).getLabel());
+            label.setText(mDataset.get(position).gettitle());
             label.setTextColor(Color.BLACK);
         }
 

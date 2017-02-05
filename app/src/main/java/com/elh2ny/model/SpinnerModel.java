@@ -9,6 +9,19 @@ public class SpinnerModel {
     private String id;
     private String price;
 
+    public SpinnerModel(String title, String id) {
+        this.title = title;
+        this.id = id;
+    }
+
+    public SpinnerModel(String title, String id, String price) {
+        this.title = title;
+        this.id = id;
+        this.price = price;
+    }
+
+    public SpinnerModel() {
+    }
 
     public String getPrice() {
         return price;
