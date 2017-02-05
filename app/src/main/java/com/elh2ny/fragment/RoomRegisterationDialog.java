@@ -26,7 +26,7 @@ public class RoomRegisterationDialog extends DialogFragment implements View.OnCl
      * Create a new instance of MyDialogFragment, providing "num"
      * as an argument.
      */
-    static RoomRegisterationDialog newInstance(int num) {
+    public static RoomRegisterationDialog newInstance(int num) {
         RoomRegisterationDialog f = new RoomRegisterationDialog();
 
         // Supply num input as an argument.
