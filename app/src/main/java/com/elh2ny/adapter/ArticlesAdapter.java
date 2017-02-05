@@ -11,8 +11,7 @@ import android.widget.TextView;
 
 import com.elh2ny.R;
 import com.elh2ny.R2;
-import com.elh2ny.model.AdviceModel;
-import com.elh2ny.model.Article;
+import com.elh2ny.model.ArticlesResponseModel.Datum;
 import com.elh2ny.utility.Util;
 
 import java.util.List;
@@ -27,7 +26,7 @@ import butterknife.ButterKnife;
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private List<Article> mDataSet;
+    private List<Datum> mDataSet;
     private Context mContext;
 
     /**
@@ -77,7 +76,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public ArticlesAdapter(Context mContext, List<Article> dataSet) {
+    public ArticlesAdapter(Context mContext, List<Datum> dataSet) {
         this.mContext = mContext;
         mDataSet = dataSet;
     }
