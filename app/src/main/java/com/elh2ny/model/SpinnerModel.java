@@ -5,20 +5,25 @@ package com.elh2ny.model;
  */
 
 public class SpinnerModel {
-    private String label;
+    private String title;
     private String id;
+    private String price;
 
-    public SpinnerModel(String label, String id) {
-        this.label = label;
-        this.id = id;
+
+    public String getPrice() {
+        return price;
     }
 
-    public String getLabel() {
-        return label;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public String gettitle() {
+        return title;
+    }
+
+    public void settitle(String title) {
+        this.title = title;
     }
 
     public String getId() {
