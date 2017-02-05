@@ -97,7 +97,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             View v = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.layout_loading_item, viewGroup, false);
 
-            return new ArticlesAdapter.LoadingViewHolder(v);
+            return new LoadingViewHolder(v);
         }
     }
 
@@ -106,7 +106,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(final RecyclerView.ViewHolder view, final int position) {
         Log.d(TAG, "Element " + position + " set.");
 
-        if (view instanceof ArticlesAdapter.ViewHolder) {
+        if (view instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) view;
             //change text font
             Util.changeViewTypeFace(mContext, "fonts/DroidKufi-Regular.ttf", viewHolder.getTextView1());

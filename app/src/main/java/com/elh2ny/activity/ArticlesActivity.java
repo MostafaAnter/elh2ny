@@ -1,6 +1,7 @@
 package com.elh2ny.activity;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,11 +37,14 @@ public class ArticlesActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         SwipeRefreshLayout.OnRefreshListener{
 
+    @Nullable
     @BindView(R2.id.recyclerView)
     RecyclerView mRecyclerView;
+    @Nullable
     @BindView(R2.id.swipeRefresh)
     SwipeRefreshLayout mSwipeRefresh;
 
+    @Nullable
     @BindView(R2.id.noData)
     LinearLayout noDataView;
 
@@ -67,6 +71,9 @@ public class ArticlesActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         changeFontOfNavigation();
+
+
+        onRefresh();
 
     }
 
