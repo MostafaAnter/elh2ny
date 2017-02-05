@@ -6,14 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.elh2ny.R;
 import com.elh2ny.R2;
 import com.elh2ny.model.AdviceModel;
-import com.elh2ny.model.RoomModel;
+import com.elh2ny.model.Article;
 import com.elh2ny.utility.Util;
 
 import java.util.List;
@@ -25,10 +24,10 @@ import butterknife.ButterKnife;
  * Created by mostafa_anter on 1/10/17.
  */
 
-public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private List<AdviceModel> mDataSet;
+    private List<Article> mDataSet;
     private Context mContext;
 
     /**
@@ -78,7 +77,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public AdviceAdapter(Context mContext, List<AdviceModel> dataSet) {
+    public ArticlesAdapter(Context mContext, List<Article> dataSet) {
         this.mContext = mContext;
         mDataSet = dataSet;
     }
@@ -89,7 +88,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (viewType == VIEW_TYPE_ITEM) {
             // Create a new view.
             View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.advice_item, viewGroup, false);
+                    .inflate(R.layout.list_item_article, viewGroup, false);
 
             return new ViewHolder(v);
         } else {
@@ -97,7 +96,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             View v = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.layout_loading_item, viewGroup, false);
 
-            return new ArticlesAdapter.LoadingViewHolder(v);
+            return new LoadingViewHolder(v);
         }
     }
 
@@ -106,7 +105,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(final RecyclerView.ViewHolder view, final int position) {
         Log.d(TAG, "Element " + position + " set.");
 
-        if (view instanceof ArticlesAdapter.ViewHolder) {
+        if (view instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) view;
             //change text font
             Util.changeViewTypeFace(mContext, "fonts/DroidKufi-Regular.ttf", viewHolder.getTextView1());
@@ -131,8 +130,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     public static class LoadingViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R2.id.progressBar)
-        ProgressBar progressBar;
+        @BindView(R2.id.progressBar) ProgressBar progressBar;
         public LoadingViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
