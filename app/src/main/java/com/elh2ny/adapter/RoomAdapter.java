@@ -16,8 +16,7 @@ import android.widget.TextView;
 
 import com.elh2ny.R;
 import com.elh2ny.R2;
-import com.elh2ny.fragment.RoomRegisterationDialog;
-import com.elh2ny.model.RoomModel;
+import com.elh2ny.model.roomsResponseModel.RoomModel;
 import com.elh2ny.utility.Util;
 
 
