@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -73,7 +74,12 @@ public class SearchActivity extends BaseActivity
     @Optional
     @OnClick(R2.id.card_view1)
     public void goToSearchResultPage(CardView view) {
-        startActivity(new Intent(this, SearchResultActivity.class));
+        Intent intent = new Intent(this, SearchResultActivity.class);
+        intent.putExtra(Constants.CITY, city);
+        intent.putExtra(Constants.AREA, area);
+        intent.putExtra(Constants.PRICE, price);
+        intent.putExtra(Constants.TYPE, type);
+        startActivity(intent);
     }
 
     private static Subscription subscription1, subscription2,
@@ -141,6 +147,8 @@ public class SearchActivity extends BaseActivity
                     area = null;
                     getArea();
 
+                    Log.d("debug_mostafa", selectedItem.getId());
+
                 }
             }
 
@@ -168,6 +176,7 @@ public class SearchActivity extends BaseActivity
                 if (position > 0) {
                     // doSome things
                     area = selectedItem.getId();
+                    Log.d("debug_mostafa", selectedItem.getId());
                 }
             }
 
@@ -194,7 +203,8 @@ public class SearchActivity extends BaseActivity
                 SpinnerModel selectedItem = (SpinnerModel) parent.getItemAtPosition(position);
                 if (position > 0) {
                     // doSome things
-                    price = selectedItem.getId();
+                    price = selectedItem.getPrice();
+                    Log.d("debug_mostafa", selectedItem.getPrice());
                 }
             }
 
@@ -222,6 +232,7 @@ public class SearchActivity extends BaseActivity
                 if (position > 0) {
                     // doSome things
                     type = selectedItem.getId();
+                    Log.d("debug_mostafa", selectedItem.getId());
                 }
             }
 
@@ -279,7 +290,9 @@ public class SearchActivity extends BaseActivity
                             e.printStackTrace();
                             sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
                         }
+                        subscription1.unsubscribe();
                     });
+
 
             subscription2 = priceObservable
                     .subscribeOn(Schedulers.newThread())
@@ -295,7 +308,9 @@ public class SearchActivity extends BaseActivity
                             e.printStackTrace();
                             sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
                         }
+                        subscription2.unsubscribe();
                     });
+
 
             subscription3 = typesObservable
                     .subscribeOn(Schedulers.newThread())
@@ -311,6 +326,7 @@ public class SearchActivity extends BaseActivity
                             e.printStackTrace();
                             sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
                         }
+                        subscription3.unsubscribe();
                     });
 
 
@@ -324,6 +340,7 @@ public class SearchActivity extends BaseActivity
 
         Observable<TownsResponseModel> townsObservable =
                 apiService.getTowns(Constants.TOKEN, city);
+        Log.d("debug_mostafa", city);
 
         subscription4 = townsObservable
                 .subscribeOn(Schedulers.newThread())
@@ -339,6 +356,7 @@ public class SearchActivity extends BaseActivity
                         e.printStackTrace();
                         sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
                     }
+                    subscription4.unsubscribe();
                 });
     }
 }
