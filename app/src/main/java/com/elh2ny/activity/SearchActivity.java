@@ -86,7 +86,7 @@ public class SearchActivity extends BaseActivity
     subscription3, subscription4;
     private ApiInterface apiService;
 
-    private String city, area, price, type;
+    private String city = "", area = "", price = "", type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +144,7 @@ public class SearchActivity extends BaseActivity
                 if (position > 0) {
                     // doSome things
                     city = selectedItem.getId();
-                    area = null;
+                    area = "";
                     getArea();
 
                     Log.d("debug_mostafa", selectedItem.getId());
