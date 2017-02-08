@@ -44,10 +44,11 @@ public class SweetDialogHelper {
                 .show();
     }
 
-    public void showSuccessfulMessage(String title, String message) {
+    public void showSuccessfulMessage(String title, String message, SweetAlertDialog.OnSweetClickListener action) {
         pDialog = new SweetAlertDialog(mContext, SweetAlertDialog.SUCCESS_TYPE);
         pDialog.setTitleText(title)
                 .setContentText(message)
+                .setConfirmClickListener(action)
                 .show();
     }
 

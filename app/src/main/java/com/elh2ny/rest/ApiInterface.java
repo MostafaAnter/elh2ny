@@ -64,5 +64,5 @@ public interface ApiInterface {
     @POST("inc/order")
     Observable<OrderResponse> getOrder(@Field("token") String token, @Field("title") String title,
                                        @Field("disease") String disease, @Field("point") String point,
-                                       @Field("tel") String tel, @Field("id") String id);
+                                       @Field("tel") String tel, @Field("id") String id, @Field("mail") String mail);
 }

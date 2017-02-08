@@ -108,7 +108,7 @@
                     android:layout_height="35dp"
                     android:background="#00000000"
                     android:hint="التشخيص"
-                    android:inputType="phone"
+                    android:inputType="text"
                     android:textAlignment="viewStart"
                     android:textSize="15sp"
                     tools:ignore="RtlCompat" />
@@ -140,7 +140,7 @@
                     android:layout_height="35dp"
                     android:background="#00000000"
                     android:hint="جهة التحويل"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text"
                     android:textAlignment="viewStart"
                     android:textSize="15sp"
                     tools:ignore="RtlCompat" />
@@ -205,7 +205,7 @@
                     android:layout_height="35dp"
                     android:background="#00000000"
                     android:hint="رقم تليفون ولي الأمر"
-                    android:inputType="textPassword"
+                    android:inputType="phone"
                     android:textAlignment="viewStart"
                     android:textSize="15sp"
                     tools:ignore="RtlCompat" />
