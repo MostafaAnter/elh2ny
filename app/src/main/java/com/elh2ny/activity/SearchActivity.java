@@ -23,7 +23,21 @@ import android.widget.Toast;
 import com.elh2ny.R;
 import com.elh2ny.R2;
 import com.elh2ny.adapter.SpinnerCustomAdapter;
+import com.elh2ny.model.NetworkEvent;
+import com.elh2ny.model.ResponseOfPrices.PriceResponse;
 import com.elh2ny.model.SpinnerModel;
+import com.elh2ny.model.cityResponce.CityResponseModel;
+import com.elh2ny.model.townResponse.TownsResponseModel;
+import com.elh2ny.model.typesResponseModel.TypesResponseModel;
+import com.elh2ny.rest.ApiClient;
+import com.elh2ny.rest.ApiInterface;
+import com.elh2ny.utility.Constants;
+import com.elh2ny.utility.SweetDialogHelper;
+import com.elh2ny.utility.Util;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +46,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class SearchActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,9 +73,14 @@ public class SearchActivity extends BaseActivity
     @Optional
     @OnClick(R2.id.card_view1)
     public void goToSearchResultPage(CardView view) {
-        Toast.makeText(this, "SearchResult", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, SearchResultActivity.class));
     }
+
+    private static Subscription subscription1, subscription2,
+    subscription3, subscription4;
+    private ApiInterface apiService;
+
+    private String city, area, price, type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +99,9 @@ public class SearchActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         changeFontOfNavigation();
 
+        // get apiService
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+
         // set spinner
         List<SpinnerModel> models = new ArrayList<>();
         models.add(new SpinnerModel("أختر محافظة", ""));
@@ -93,6 +119,8 @@ public class SearchActivity extends BaseActivity
         models.add(new SpinnerModel("النوع", ""));
         populateSpinner4(models);
 
+        getCitiesPriceTypies();
+
     }
 
     private void populateSpinner1(List<SpinnerModel> mlist) {
@@ -109,16 +137,10 @@ public class SearchActivity extends BaseActivity
                 SpinnerModel selectedItem = (SpinnerModel) parent.getItemAtPosition(position);
                 if (position > 0) {
                     // doSome things
-//                    countryId = selectedItem.getId();
-//                    cityId = null;
-//                    getCities(countryId);
-                }
+                    city = selectedItem.getId();
+                    area = null;
+                    getArea();
 
-                if (position > 0) {
-                    // doSome things
-                  //  schoolID = selectedItem.getId();
-                } else {
-                   // schoolID = null;
                 }
             }
 
@@ -145,9 +167,7 @@ public class SearchActivity extends BaseActivity
                 SpinnerModel selectedItem = (SpinnerModel) parent.getItemAtPosition(position);
                 if (position > 0) {
                     // doSome things
-//                    countryId = selectedItem.getId();
-//                    cityId = null;
-//                    getCities(countryId);
+                    area = selectedItem.getId();
                 }
             }
 
@@ -174,9 +194,7 @@ public class SearchActivity extends BaseActivity
                 SpinnerModel selectedItem = (SpinnerModel) parent.getItemAtPosition(position);
                 if (position > 0) {
                     // doSome things
-//                    countryId = selectedItem.getId();
-//                    cityId = null;
-//                    getCities(countryId);
+                    price = selectedItem.getId();
                 }
             }
 
@@ -203,9 +221,7 @@ public class SearchActivity extends BaseActivity
                 SpinnerModel selectedItem = (SpinnerModel) parent.getItemAtPosition(position);
                 if (position > 0) {
                     // doSome things
-//                    countryId = selectedItem.getId();
-//                    cityId = null;
-//                    getCities(countryId);
+                    type = selectedItem.getId();
                 }
             }
 
@@ -216,5 +232,113 @@ public class SearchActivity extends BaseActivity
         });
 
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+        if (subscription1 != null) subscription1.unsubscribe();
+        if (subscription2 != null) subscription2.unsubscribe();
+        if (subscription3 != null) subscription3.unsubscribe();
+        if (subscription4 != null) subscription4.unsubscribe();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetworkEvent event) {
+        getCitiesPriceTypies();
+    }
+
+    private void getCitiesPriceTypies(){
+        SweetDialogHelper sdh = new SweetDialogHelper(this);
+        // check if is online or not
+        if (Util.isOnline(this) && apiService != null){
+            Observable<CityResponseModel> cityObservable =
+                    apiService.getCites(Constants.TOKEN);
+            Observable<PriceResponse> priceObservable =
+                    apiService.getPrices(Constants.TOKEN);
+            Observable<TypesResponseModel> typesObservable =
+                    apiService.getTypes(Constants.TOKEN);
+
+            subscription1 = cityObservable
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(cityResponseModel -> {
+                        try {
+                            List<SpinnerModel> models = new ArrayList<>();
+                            models.add(new SpinnerModel("أختر محافظة", ""));
+                            models.addAll(1, cityResponseModel.getCities());
+                            populateSpinner1(models);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+                    });
+
+            subscription2 = priceObservable
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(priceResponse -> {
+                        try {
+                            List<SpinnerModel> models = new ArrayList<>();
+                            models = new ArrayList<>();
+                            models.add(new SpinnerModel("السعر", ""));
+                            models.addAll(1, priceResponse.getPrices());
+                            populateSpinner3(models);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+                    });
+
+            subscription3 = typesObservable
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( typesResponseModel -> {
+                        try {
+                            List<SpinnerModel> models = new ArrayList<>();
+                            models = new ArrayList<>();
+                            models.add(new SpinnerModel("النوع", ""));
+                            models.addAll(1, typesResponseModel.getTypes());
+                            populateSpinner4(models);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+                    });
+
+
+        }else {
+            sdh.showErrorMessage("عفواً", "لا يوجد اتصال بالانترنت");
+        }
+    }
+
+    private void getArea(){
+        SweetDialogHelper sdh = new SweetDialogHelper(this);
+
+        Observable<TownsResponseModel> townsObservable =
+                apiService.getTowns(Constants.TOKEN, city);
+
+        subscription4 = townsObservable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(townsResponseModel -> {
+                    try {
+                        List<SpinnerModel> models = new ArrayList<>();
+                        models = new ArrayList<>();
+                        models.add(new SpinnerModel("أختر منطقة", ""));
+                        models.addAll(1, townsResponseModel.getTowns());
+                        populateSpinner2(models);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                    }
+                });
     }
 }

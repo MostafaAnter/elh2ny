@@ -25,6 +25,10 @@ public interface ApiInterface {
     Observable<ArticlesResponse> getArticles(@Field("token") String token, @Field("page") String page);
 
     @FormUrlEncoded
+    @POST("article")
+    Observable<ArticlesResponse> getArticle(@Field("token") String token, @Field("id") String id);
+
+    @FormUrlEncoded
     @POST("contact")
     Observable<ContactResponse> contactUs(@Field("token") String token, @Field("title") String title,
                                           @Field("subject") String subject, @Field("email") String email,
