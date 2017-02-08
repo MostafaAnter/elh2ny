@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="80dip"
             android:layout_height="80dip"
-            card_view:srcCompat="@android:drawable/sym_def_app_icon"
+            android:src="@drawable/ic_local_hotel_black_24dp"
             android:id="@+id/imageView1"
             android:tint="@color/red_btn_bg_color"
             android:scaleType="centerCrop"

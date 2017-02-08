@@ -8,19 +8,35 @@ import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.elh2ny.R;
 import com.elh2ny.R2;
 import com.elh2ny.adapter.RoomAdapter;
+import com.elh2ny.model.NetworkEvent;
 import com.elh2ny.model.roomsResponseModel.RoomModel;
+import com.elh2ny.model.roomsResponseModel.RoomResponse;
+import com.elh2ny.rest.ApiClient;
+import com.elh2ny.rest.ApiInterface;
+import com.elh2ny.utility.Constants;
+import com.elh2ny.utility.SweetDialogHelper;
+import com.elh2ny.utility.Util;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class SearchResultActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,6 +69,9 @@ public class SearchResultActivity extends BaseActivity
     protected RecyclerView.LayoutManager mLayoutManager;
     protected List<RoomModel> mDataset;
 
+    private static Subscription subscription1;
+    private ApiInterface apiService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +88,9 @@ public class SearchResultActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         changeFontOfNavigation();
+
+        // get apiService
+        apiService = ApiClient.getClient().create(ApiInterface.class);
 
         // set recyclerView
         setRecyclerView(savedInstanceState);
@@ -96,7 +118,7 @@ public class SearchResultActivity extends BaseActivity
 
 
         // get data
-        addFakeItems();
+        addItems();
     }
 
     public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
@@ -126,12 +148,56 @@ public class SearchResultActivity extends BaseActivity
         mRecyclerView.scrollToPosition(scrollPosition);
     }
 
-    private void addFakeItems(){
-        RoomModel roomModel = new RoomModel();
-        for (int i = 0; i < 20; i++) {
-            mDataset.add(roomModel);
+    private void addItems(){
+        SweetDialogHelper sdh = new SweetDialogHelper(this);
+        // check if is online or not
+        if (Util.isOnline(this) && apiService != null){
+            progressBar.setVisibility(View.VISIBLE);
+            Observable<RoomResponse> roomObservable =
+                    apiService.getIncs(Constants.TOKEN, getIntent().getStringExtra(Constants.CITY),
+                            getIntent().getStringExtra(Constants.AREA),
+                            getIntent().getStringExtra(Constants.PRICE),
+                            getIntent().getStringExtra(Constants.TYPE));
+            subscription1 = roomObservable
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(roomResponse -> {
+                        try {
+                            mDataset.addAll(roomResponse.getIncs());
+                            mAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                            noDataView.setVisibility(View.GONE);
+                            if (mDataset.size() == 0)
+                                noDataView.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+                    });
+        }else {
+            sdh.showErrorMessage("عفواً", "لا يوجد اتصال بالانترنت");
+            progressBar.setVisibility(View.GONE);
+            noDataView.setVisibility(View.VISIBLE);
         }
-        mAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+        if (subscription1 != null) subscription1.unsubscribe();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetworkEvent event) {
+        addItems();
     }
 
 }

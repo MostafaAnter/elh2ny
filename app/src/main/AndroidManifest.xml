@@ -26,18 +26,22 @@
         <activity
             android:name=".activity.BaseActivity"
             android:label="@string/title_activity_base"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SearchActivity"
             android:label="@string/title_activity_search"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SearchResultActivity"
             android:label="@string/title_activity_search_result"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ArticlesActivity"
             android:label="@string/title_activity_articles"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ArticlesDetailsActivity"
@@ -51,10 +55,12 @@
         <activity
             android:name=".activity.AdvicesActivity"
             android:label="@string/title_activity_advices"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.CallUsActivity"
             android:label="@string/title_activity_call_us"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- for network connection -->

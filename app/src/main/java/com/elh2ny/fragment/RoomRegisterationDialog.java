@@ -6,14 +6,19 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.elh2ny.R;
+import com.elh2ny.R2;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -21,6 +26,47 @@ import butterknife.ButterKnife;
  */
 public class RoomRegisterationDialog extends DialogFragment implements View.OnClickListener {
     int mNum;
+
+    @Nullable
+    @BindView(R2.id.card_view1)
+    CardView cardView1;
+
+    @Nullable
+    @BindView(R2.id.linear1)
+    LinearLayout linear1;
+    @Nullable
+    @BindView(R2.id.linear2)
+    LinearLayout linear2;
+    @Nullable
+    @BindView(R2.id.linear3)
+    LinearLayout linear3;
+    @Nullable
+    @BindView(R2.id.linear4)
+    LinearLayout linear4;
+
+    @Nullable
+    @BindView(R2.id.linear5)
+    LinearLayout linear5;
+
+    @Nullable
+    @BindView(R2.id.editText1)
+    EditText editText1;
+    @Nullable
+    @BindView(R2.id.editText2)
+    EditText editText2;
+    @Nullable
+    @BindView(R2.id.editText3)
+    EditText editText3;
+    @Nullable
+    @BindView(R2.id.editText4)
+    EditText editText4;
+    @Nullable
+    @BindView(R2.id.editText5)
+    EditText editText5;
+
+    @Nullable
+    @BindView(R2.id.text1)
+    TextView text1;
 
     /**
      * Create a new instance of MyDialogFragment, providing "num"
@@ -50,7 +96,7 @@ public class RoomRegisterationDialog extends DialogFragment implements View.OnCl
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.room_registeration_dialog, container, false);
         ButterKnife.bind(this, v);
-        changeTextFont();
+        text1.setText(getArguments().getString("name"));
 
         return v;
     }
@@ -70,10 +116,6 @@ public class RoomRegisterationDialog extends DialogFragment implements View.OnCl
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             // dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
-    }
-
-    private void changeTextFont(){
-
     }
 
     @Override

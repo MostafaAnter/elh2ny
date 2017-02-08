@@ -85,7 +85,8 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
                     // Create and show the dialog.
                     DialogFragment newFragment = newInstance(mStackLevel);
                     Bundle bundle1 = new Bundle();
-                   // bundle1.putString("user_id", getArguments().getString(Constants.DETAIL_USER_ID));
+                    bundle1.putString("id", mDataSet.get(getPosition()).getId());
+                    bundle1.putString("name", mDataSet.get(getPosition()).getHospital());
                     newFragment.setArguments(bundle1);
                     newFragment.show(ft, "dialog");
                 }
@@ -124,6 +125,10 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
         //change text font
         Util.changeViewTypeFace(mContext, "fonts/DroidKufi-Regular.ttf", viewHolder.getTextView2());
         Util.changeViewTypeFace(mContext, "fonts/DroidKufi-Regular.ttf", viewHolder.getTextView3());
+
+        viewHolder.getTextView1().setText(mDataSet.get(position).getHospital());
+        viewHolder.getTextView2().setText(mDataSet.get(position).getType());
+        viewHolder.getTextView3().setText(mDataSet.get(position).getPrice() + " ج");
 
 
     }
