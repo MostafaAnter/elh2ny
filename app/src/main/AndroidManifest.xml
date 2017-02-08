@@ -36,6 +36,7 @@
         <activity
             android:name=".activity.SearchResultActivity"
             android:label="@string/title_activity_search_result"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -60,6 +61,7 @@
         <activity
             android:name=".activity.CallUsActivity"
             android:label="@string/title_activity_call_us"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar"/>
 

@@ -14,9 +14,21 @@ import android.widget.LinearLayout;
 
 import com.elh2ny.R;
 import com.elh2ny.R2;
+import com.elh2ny.model.contactUsResponseModel.ContactResponse;
+import com.elh2ny.model.sendRoomOrderResponse.OrderResponse;
+import com.elh2ny.rest.ApiClient;
+import com.elh2ny.rest.ApiInterface;
+import com.elh2ny.utility.Constants;
+import com.elh2ny.utility.SweetDialogHelper;
+import com.elh2ny.utility.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class CallUsActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnFocusChangeListener,
@@ -56,6 +68,10 @@ public class CallUsActivity extends BaseActivity
     @BindView(R2.id.editText4)
     EditText editText4;
 
+    private SweetDialogHelper sdh;
+    private String title, subject, email, msg;
+    private static Subscription subscription1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +99,8 @@ public class CallUsActivity extends BaseActivity
         // on click
         cardView1.setOnClickListener(this);
         linear7.setOnClickListener(this);
+
+        sdh = new SweetDialogHelper(this);
     }
 
     @Override
@@ -131,6 +149,66 @@ public class CallUsActivity extends BaseActivity
                 Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "010895000999"));
                 startActivity(callIntent);
                 break;
+            case R.id.card_view1:
+
+                if (Util.isOnline(this)){
+                    if (checkData()) {
+                        sdh.showMaterialProgress("تحميل..");
+                        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+                        Observable<ContactResponse> contactObservable =
+                                apiService.contactUs(Constants.TOKEN, title, subject, email, msg);
+                        subscription1 = contactObservable
+                                .subscribeOn(Schedulers.newThread())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(contactResponse -> {
+                                    try {
+                                        sdh.dismissDialog();
+                                        if (contactResponse.getError().equalsIgnoreCase("false")){
+                                            sdh.showSuccessfulMessage("تم", "تم الارسال بنجاح", new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                    sweetAlertDialog.dismissWithAnimation();
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                    } catch (Exception e) {
+                                        sdh.dismissDialog();
+                                        e.printStackTrace();
+                                    }
+                                    subscription1.unsubscribe();
+                                });
+                    }
+                }else {
+                    sdh.showErrorMessage("عفواً", "لا يوجد اتصال بالانترنت");
+                }
+                break;
         }
+    }
+
+    private boolean checkData(){
+        title = editText1.getText().toString().trim();
+        subject = editText3.getText().toString().trim();
+        email = editText2.getText().toString().trim();
+        msg = editText4.getText().toString().trim();
+
+
+        if (title == null || title.trim().isEmpty()) {
+            new SweetDialogHelper(this).showErrorMessage("خطأ", "أدخل أسمك");
+            return false;
+        }
+        if (subject == null || subject.trim().isEmpty()) {
+            new SweetDialogHelper(this).showErrorMessage("خطأ", "أدخل عنوان الرسالة");
+            return false;
+        }
+        if (email == null || email.trim().isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            new SweetDialogHelper(this).showErrorMessage("خطأ", "أدخل البريد الإلكترونى الصحيح");
+            return false;
+        }
+        if (msg == null || msg.trim().isEmpty()) {
+            new SweetDialogHelper(this).showErrorMessage("خطأ", "أدخل الرسالة");
+            return false;
+        }
+        return true;
     }
 }

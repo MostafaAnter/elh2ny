@@ -172,6 +172,7 @@
                         android:layout_margin="5dp"
                         android:inputType="text"
                         android:gravity="top"
+                        android:maxLines="6"
                         android:textAlignment="viewStart"
                         android:textSize="15sp"
                         tools:ignore="RtlCompat" />

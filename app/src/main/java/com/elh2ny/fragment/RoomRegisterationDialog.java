@@ -174,6 +174,7 @@ public class RoomRegisterationDialog extends DialogFragment implements View.OnCl
                                         sdh.dismissDialog();
                                         e.printStackTrace();
                                     }
+                                    subscription1.unsubscribe();
                                 });
                     }
                 }else {
@@ -211,8 +212,8 @@ public class RoomRegisterationDialog extends DialogFragment implements View.OnCl
             new SweetDialogHelper(getActivity()).showErrorMessage("خطأ", "أغلق الصفحة وأعد المحاولة");
             return false;
         }
-        if (mail == null || mail.trim().isEmpty()) {
-            new SweetDialogHelper(getActivity()).showErrorMessage("خطأ", "أدخل البريد الإلكترونى");
+        if (mail == null || mail.trim().isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
+            new SweetDialogHelper(getActivity()).showErrorMessage("خطأ", "أدخل البريد الإلكترونى الصحيح");
             return false;
         }
         return true;
