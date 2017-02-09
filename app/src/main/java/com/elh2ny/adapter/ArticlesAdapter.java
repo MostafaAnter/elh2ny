@@ -9,12 +9,16 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.elh2ny.R;
 import com.elh2ny.R2;
 import com.elh2ny.model.articlesResponseModel.Datum;
+import com.elh2ny.utility.DynamicHeightNetworkImageView;
 import com.elh2ny.utility.Util;
 
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +38,17 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     public  class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R2.id.textView1)TextView textView1;
+        @BindView(R2.id.article_title)TextView textView1;
+        @BindView(R2.id.article_subtitle)TextView textView2;
+        @BindView(R2.id.thumbnail)DynamicHeightNetworkImageView imageView;
+
+        public TextView getTextView2() {
+            return textView2;
+        }
+
+        public DynamicHeightNetworkImageView getImageView() {
+            return imageView;
+        }
 
         public TextView getTextView1() {
             return textView1;
@@ -108,6 +122,17 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ViewHolder viewHolder = (ViewHolder) view;
             //change text font
             Util.changeViewTypeFace(mContext, "fonts/DroidKufi-Regular.ttf", viewHolder.getTextView1());
+            viewHolder.getTextView1().setText(mDataSet.get(position).getTitle());
+            viewHolder.getTextView2().setText((Util.manipulateDateFormat(mDataSet.get(position).getCreatedAt())) +
+            mDataSet.get(position).getDescription());
+            // load thumbnail image :)
+            Glide.with(mContext)
+                    .load("http://elh2ny.com/" + mDataSet.get(position).getImg())
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .crossFade()
+                    .into(viewHolder.getImageView());
+            viewHolder.getImageView().setAspectRatio(1f + (new Random().nextFloat()));
         } else {
             LoadingViewHolder viewHolder = (LoadingViewHolder) view;
             viewHolder.progressBar.setIndeterminate(true);

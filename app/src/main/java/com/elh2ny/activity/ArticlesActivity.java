@@ -16,14 +16,29 @@ import android.widget.Toast;
 import com.elh2ny.R;
 import com.elh2ny.R2;
 import com.elh2ny.adapter.ArticlesAdapter;
+import com.elh2ny.model.NetworkEvent;
+import com.elh2ny.model.articlesResponseModel.ArticlesResponse;
 import com.elh2ny.model.articlesResponseModel.Datum;
+import com.elh2ny.rest.ApiClient;
+import com.elh2ny.rest.ApiInterface;
+import com.elh2ny.utility.Constants;
+import com.elh2ny.utility.EndlessRecyclerViewScrollListener;
+import com.elh2ny.utility.SweetDialogHelper;
 import com.elh2ny.utility.Util;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ArticlesActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -45,6 +60,10 @@ public class ArticlesActivity extends BaseActivity
     protected StaggeredGridLayoutManager sglm;
     protected List<Datum> mDataSet;
 
+    private static Subscription subscription1;
+    private ApiInterface apiService;
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +83,8 @@ public class ArticlesActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         changeFontOfNavigation();
 
+        // get apiService
+        apiService = ApiClient.getClient().create(ApiInterface.class);
 
         onRefresh();
 
@@ -74,6 +95,17 @@ public class ArticlesActivity extends BaseActivity
         mDataSet = new ArrayList<>();
         sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(sglm) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        mRecyclerView.addOnScrollListener(scrollListener);
         mAdapter = new ArticlesAdapter(this, mDataSet);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
@@ -104,5 +136,54 @@ public class ArticlesActivity extends BaseActivity
             mSwipeRefresh.setRefreshing(false);
             Toast.makeText(this, "لا يوجد أتصال بالأنترنت", Toast.LENGTH_LONG).show();
         }
+        if (mDataSet.size() > 0){
+            mDataSet.clear();
+            mAdapter.notifyDataSetChanged();
+        }
+        loadNextDataFromApi(1);
+    }
+
+    private void loadNextDataFromApi(int offset){
+        SweetDialogHelper sdh = new SweetDialogHelper(this);
+        // check if is online or not
+        if (Util.isOnline(this) && apiService != null){
+            Observable<ArticlesResponse> articlesObservable =
+                    apiService.getArticles(Constants.TOKEN, String.valueOf(offset));
+            subscription1 = articlesObservable
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(articlesResponse -> {
+                        try {
+                            mDataSet.addAll(mDataSet.size(), articlesResponse.getArticles().getData());
+                            mAdapter.notifyDataSetChanged();
+                            mSwipeRefresh.setRefreshing(false);
+                            noDataView.setVisibility(View.GONE);
+                            if (mDataSet.size() == 0)
+                                noDataView.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+                    });
+        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+        if (subscription1 != null) subscription1.unsubscribe();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetworkEvent event) {
+        loadNextDataFromApi(1);
     }
 }

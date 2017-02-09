@@ -8,8 +8,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by mostafa_anter on 1/4/17.
@@ -76,6 +82,29 @@ public class Util {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static String manipulateDateFormat(String post_date){
+        if (post_date == null)
+            return "";
+
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = (Date)formatter.parse(post_date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (date != null) {
+            // Converting timestamp into x ago format
+            CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
+                    Long.parseLong(String.valueOf(date.getTime())),
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+            return timeAgo + "";
+        }else {
+            return post_date;
         }
     }
 }
