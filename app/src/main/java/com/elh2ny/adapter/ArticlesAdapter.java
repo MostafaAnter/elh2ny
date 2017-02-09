@@ -1,6 +1,7 @@
 package com.elh2ny.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.elh2ny.R;
 import com.elh2ny.R2;
+import com.elh2ny.activity.ArticlesDetailsActivity;
 import com.elh2ny.model.articlesResponseModel.Datum;
 import com.elh2ny.utility.DynamicHeightNetworkImageView;
 import com.elh2ny.utility.Util;
@@ -63,20 +65,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
 
-//                    mStackLevel++;
-//                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-//                    if (prev != null) {
-//                        ft.remove(prev);
-//                    }
-//                    ft.addToBackStack(null);
-//
-//                    // Create and show the dialog.
-//                    DialogFragment newFragment = MyDialogFragment.newInstance(mStackLevel);
-//                    Bundle bundle1 = new Bundle();
-//                    bundle1.putString("user_id", getArguments().getString(Constants.DETAIL_USER_ID));
-//                    newFragment.setArguments(bundle1);
-//                    newFragment.show(ft, "dialog");
+                    Intent intent = new Intent(mContext, ArticlesDetailsActivity.class);
+                    intent.putExtra("item_data", mDataSet.get(getPosition()));
+                    mContext.startActivity(intent);
                 }
             });
 

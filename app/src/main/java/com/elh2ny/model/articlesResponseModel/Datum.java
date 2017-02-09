@@ -14,9 +14,9 @@ public class Datum implements Parcelable {
     private String img;
     private String active;
     private String views;
-    private String userId;
-    private String createdAt;
-    private String updatedAt;
+    private String user_id;
+    private String created_at;
+    private String updated_at;
 
     public Integer getId() {
         return id;
@@ -74,28 +74,28 @@ public class Datum implements Parcelable {
         this.views = views;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getuser_id() {
+        return user_id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setuser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getcreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setcreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getupdated_at() {
+        return updated_at;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setupdated_at(String updated_at) {
+        this.updated_at = updated_at;
     }
 
 
@@ -107,9 +107,9 @@ public class Datum implements Parcelable {
         img = in.readString();
         active = in.readString();
         views = in.readString();
-        userId = in.readString();
-        createdAt = in.readString();
-        updatedAt = in.readString();
+        user_id = in.readString();
+        created_at = in.readString();
+        updated_at = in.readString();
     }
 
     @Override
@@ -131,9 +131,9 @@ public class Datum implements Parcelable {
         dest.writeString(img);
         dest.writeString(active);
         dest.writeString(views);
-        dest.writeString(userId);
-        dest.writeString(createdAt);
-        dest.writeString(updatedAt);
+        dest.writeString(user_id);
+        dest.writeString(created_at);
+        dest.writeString(updated_at);
     }
 
     @SuppressWarnings("unused")
