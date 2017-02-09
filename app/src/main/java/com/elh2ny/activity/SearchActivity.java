@@ -35,6 +35,7 @@ import com.elh2ny.rest.ApiInterface;
 import com.elh2ny.utility.Constants;
 import com.elh2ny.utility.SweetDialogHelper;
 import com.elh2ny.utility.Util;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -127,6 +128,8 @@ public class SearchActivity extends BaseActivity
         populateSpinner4(models);
 
         getCitiesPriceTypies();
+
+        FirebaseMessaging.getInstance().subscribeToTopic("elh2ny");
 
     }
 

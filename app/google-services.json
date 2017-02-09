@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "529652660685",
+    "firebase_url": "https://elh2ny-94d48.firebaseio.com",
+    "project_id": "elh2ny-94d48",
+    "storage_bucket": "elh2ny-94d48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529652660685:android:9a3a29c7c1f10fa0",
+        "android_client_info": {
+          "package_name": "com.elh2ny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529652660685-t832njo4l7hlid4h4qdpf866hbv4kcfi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGDvrMkQeSzVGgtgQmdKsnT_Zs_TY8uOk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

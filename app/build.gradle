@@ -49,4 +49,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.0'
     // event bus
     compile 'org.greenrobot:eventbus:3.0.0'
+    // for FCM
+    compile 'com.google.firebase:firebase-messaging:9.8.0'
 }
+apply plugin: 'com.google.gms.google-services'

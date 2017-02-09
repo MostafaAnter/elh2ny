@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,11 +16,27 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.elh2ny.R;
+import com.elh2ny.model.SpinnerModel;
+import com.elh2ny.model.articlesResponseModel.ArticlesResponse;
 import com.elh2ny.model.articlesResponseModel.Datum;
+import com.elh2ny.model.oneArticleResponse.OneArticleResponse;
+import com.elh2ny.model.townResponse.TownsResponseModel;
+import com.elh2ny.rest.ApiClient;
+import com.elh2ny.rest.ApiInterface;
+import com.elh2ny.utility.Constants;
+import com.elh2ny.utility.SweetDialogHelper;
 import com.elh2ny.utility.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ArticlesDetailsActivity extends AppCompatActivity {
 
@@ -33,16 +50,28 @@ public class ArticlesDetailsActivity extends AppCompatActivity {
     //@BindView(R.id.adView)AdView mAdView;
 
     private Datum article;
+    private String id;
+
+    private static Subscription subscription4;
+    private ApiInterface apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_articles_details);
         ButterKnife.bind(this);
-        article = (Datum) getIntent().getExtras().get("item_data");
-        if (article == null){
-            // replace with load item
 
+        if (getIntent().getExtras() != null && !getIntent().getExtras().getString("id", "")
+                .isEmpty())
+            id = getIntent().getStringExtra("id");
+
+        // get apiService
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        article = (Datum) getIntent().getExtras().get("item_data");
+        if (article == null && id != null){
+            // replace with load item
+            getArticle();
         }else {
             bindData();
         }
@@ -102,5 +131,40 @@ public class ArticlesDetailsActivity extends AppCompatActivity {
         } catch (Exception e) {
             //e.toString();
         }
+    }
+
+    private void getArticle(){
+        final SweetDialogHelper sdh = new SweetDialogHelper(this);
+
+        Observable<OneArticleResponse> articleObservable =
+                apiService.getArticle(Constants.TOKEN, id);
+
+        subscription4 = articleObservable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<OneArticleResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(OneArticleResponse oneArticleResponse) {
+                        try {
+                            article = oneArticleResponse.getArticle();
+                            if (article != null)
+                                bindData();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+                        subscription4.unsubscribe();
+                    }
+                });
     }
 }

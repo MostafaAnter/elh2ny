@@ -31,7 +31,6 @@ public class SplashActivity extends AppCompatActivity {
 
         // change text font
         Util.changeViewTypeFace(this, "fonts/DroidKufi-Regular.ttf", loadingText);
-
         // loading task
         loadingTask();
     }
@@ -57,8 +56,17 @@ public class SplashActivity extends AppCompatActivity {
                         public void run() {
                             progressBar.setProgress(progressStatus);
                             if (progressStatus == 100) {
-                                startActivity(new Intent(SplashActivity.this, SearchActivity.class)
-                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+
+                                if (getIntent().getExtras() != null && !getIntent().getExtras().getString("id", "")
+                                        .isEmpty()) {
+                                    Intent intent = new Intent(SplashActivity.this, ArticlesDetailsActivity.class);
+                                    intent.putExtra("id", getIntent().getExtras().getString("id", ""));
+                                    startActivity(intent
+                                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                                } else {
+                                    startActivity(new Intent(SplashActivity.this, SearchActivity.class)
+                                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                                }
                             }
 
                         }

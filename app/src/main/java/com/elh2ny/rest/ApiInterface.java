@@ -5,6 +5,7 @@ import com.elh2ny.model.advicesResponceModel.AdviceResponce;
 import com.elh2ny.model.articlesResponseModel.ArticlesResponse;
 import com.elh2ny.model.cityResponce.CityResponseModel;
 import com.elh2ny.model.contactUsResponseModel.ContactResponse;
+import com.elh2ny.model.oneArticleResponse.OneArticleResponse;
 import com.elh2ny.model.roomsResponseModel.RoomResponse;
 import com.elh2ny.model.sendRoomOrderResponse.OrderResponse;
 import com.elh2ny.model.townResponse.TownsResponseModel;
@@ -26,7 +27,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("article")
-    Observable<ArticlesResponse> getArticle(@Field("token") String token, @Field("id") String id);
+    Observable<OneArticleResponse> getArticle(@Field("token") String token, @Field("id") String id);
 
     @FormUrlEncoded
     @POST("contact")
