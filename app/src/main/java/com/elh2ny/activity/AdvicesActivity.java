@@ -8,19 +8,37 @@ import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.elh2ny.R;
 import com.elh2ny.R2;
 import com.elh2ny.adapter.AdviceAdapter;
+import com.elh2ny.model.NetworkEvent;
 import com.elh2ny.model.advicesResponceModel.AdviceModel;
+import com.elh2ny.model.advicesResponceModel.AdviceResponce;
+import com.elh2ny.model.roomsResponseModel.RoomResponse;
+import com.elh2ny.rest.ApiClient;
+import com.elh2ny.rest.ApiInterface;
+import com.elh2ny.utility.Constants;
+import com.elh2ny.utility.EndlessRecyclerViewScrollListener;
+import com.elh2ny.utility.SweetDialogHelper;
+import com.elh2ny.utility.Util;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class AdvicesActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +55,8 @@ public class AdvicesActivity extends BaseActivity
     ProgressBar progressBar;
 
 
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     // for recycler view
     private static final String TAG = "ProviderChatsFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
@@ -52,6 +72,9 @@ public class AdvicesActivity extends BaseActivity
     protected AdviceAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected List<AdviceModel> mDataset;
+
+    private static Subscription subscription1;
+    private ApiInterface apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +93,8 @@ public class AdvicesActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         changeFontOfNavigation();
-
+        // get apiService
+        apiService = ApiClient.getClient().create(ApiInterface.class);
         // set recyclerView
         setRecyclerView(savedInstanceState);
 
@@ -91,13 +115,25 @@ public class AdvicesActivity extends BaseActivity
         }
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener((LinearLayoutManager)mLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        mRecyclerView.addOnScrollListener(scrollListener);
+
         mAdapter = new AdviceAdapter(this, mDataset);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
 
 
         // get data
-        addFakeItems();
+        loadNextDataFromApi(1);
     }
 
     public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
@@ -127,11 +163,53 @@ public class AdvicesActivity extends BaseActivity
         mRecyclerView.scrollToPosition(scrollPosition);
     }
 
-    private void addFakeItems(){
-        AdviceModel roomModel = new AdviceModel();
-        for (int i = 0; i < 20; i++) {
-            mDataset.add(roomModel);
+    private void loadNextDataFromApi(int offset){
+        SweetDialogHelper sdh = new SweetDialogHelper(this);
+        // check if is online or not
+        if (Util.isOnline(this) && apiService != null){
+            progressBar.setVisibility(View.VISIBLE);
+            Observable<AdviceResponce> adviceObservable =
+                    apiService.getAdvices(Constants.TOKEN, String.valueOf(offset));
+            subscription1 = adviceObservable
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(adviceResponce -> {
+                        try {
+                            mDataset.addAll(mDataset.size(), adviceResponce.getAdvices().getData());
+                            mAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                            noDataView.setVisibility(View.GONE);
+                            if (mDataset.size() == 0)
+                                noDataView.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+                    });
+        }else {
+            sdh.showErrorMessage("عفواً", "لا يوجد اتصال بالانترنت");
+            progressBar.setVisibility(View.GONE);
+            noDataView.setVisibility(View.VISIBLE);
         }
-        mAdapter.notifyDataSetChanged();
+
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+        if (subscription1 != null) subscription1.unsubscribe();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetworkEvent event) {
+        loadNextDataFromApi(1);
+    }
+
 }

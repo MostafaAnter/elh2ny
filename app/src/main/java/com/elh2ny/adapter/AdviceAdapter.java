@@ -108,6 +108,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ViewHolder viewHolder = (ViewHolder) view;
             //change text font
             Util.changeViewTypeFace(mContext, "fonts/DroidKufi-Regular.ttf", viewHolder.getTextView1());
+            viewHolder.getTextView1().setText(mDataSet.get(position).getContent());
         } else {
             LoadingViewHolder viewHolder = (LoadingViewHolder) view;
             viewHolder.progressBar.setIndeterminate(true);
