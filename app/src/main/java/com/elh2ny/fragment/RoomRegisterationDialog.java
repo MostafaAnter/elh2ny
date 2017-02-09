@@ -28,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -158,23 +159,36 @@ public class RoomRegisterationDialog extends DialogFragment implements View.OnCl
                         subscription1 = orderObservable
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(orderResponse -> {
-                                    try {
-                                        sdh.dismissDialog();
-                                        if (orderResponse.getError().equalsIgnoreCase("false")){
-                                            sdh.showSuccessfulMessage("تم", "الحجز تم بنجاح", new SweetAlertDialog.OnSweetClickListener() {
-                                                @Override
-                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                    sweetAlertDialog.dismissWithAnimation();
-                                                    dismiss();
-                                                }
-                                            });
-                                        }
-                                    } catch (Exception e) {
-                                        sdh.dismissDialog();
-                                        e.printStackTrace();
+                                .subscribe(new Subscriber<OrderResponse>() {
+                                    @Override
+                                    public void onCompleted() {
+
                                     }
-                                    subscription1.unsubscribe();
+
+                                    @Override
+                                    public void onError(Throwable e) {
+
+                                    }
+
+                                    @Override
+                                    public void onNext(OrderResponse orderResponse) {
+                                        try {
+                                            sdh.dismissDialog();
+                                            if (orderResponse.getError().equalsIgnoreCase("false")){
+                                                sdh.showSuccessfulMessage("تم", "الحجز تم بنجاح", new SweetAlertDialog.OnSweetClickListener() {
+                                                    @Override
+                                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                        sweetAlertDialog.dismissWithAnimation();
+                                                        dismiss();
+                                                    }
+                                                });
+                                            }
+                                        } catch (Exception e) {
+                                            sdh.dismissDialog();
+                                            e.printStackTrace();
+                                        }
+                                        subscription1.unsubscribe();
+                                    }
                                 });
                     }
                 }else {

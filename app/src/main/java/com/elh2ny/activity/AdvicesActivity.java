@@ -36,6 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -164,7 +165,7 @@ public class AdvicesActivity extends BaseActivity
     }
 
     private void loadNextDataFromApi(int offset){
-        SweetDialogHelper sdh = new SweetDialogHelper(this);
+        final SweetDialogHelper sdh = new SweetDialogHelper(this);
         // check if is online or not
         if (Util.isOnline(this) && apiService != null){
             progressBar.setVisibility(View.VISIBLE);
@@ -173,17 +174,30 @@ public class AdvicesActivity extends BaseActivity
             subscription1 = adviceObservable
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(adviceResponce -> {
-                        try {
-                            mDataset.addAll(mDataset.size(), adviceResponce.getAdvices().getData());
-                            mAdapter.notifyDataSetChanged();
-                            progressBar.setVisibility(View.GONE);
-                            noDataView.setVisibility(View.GONE);
-                            if (mDataset.size() == 0)
-                                noDataView.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    .subscribe(new Subscriber<AdviceResponce>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
                             sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+
+                        @Override
+                        public void onNext(AdviceResponce adviceResponce) {
+                            try {
+                                mDataset.addAll(mDataset.size(), adviceResponce.getAdvices().getData());
+                                mAdapter.notifyDataSetChanged();
+                                progressBar.setVisibility(View.GONE);
+                                noDataView.setVisibility(View.GONE);
+                                if (mDataset.size() == 0)
+                                    noDataView.setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                            }
                         }
                     });
         }else {

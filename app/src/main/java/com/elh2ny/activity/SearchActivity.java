@@ -48,6 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -267,7 +268,7 @@ public class SearchActivity extends BaseActivity
     }
 
     private void getCitiesPriceTypies(){
-        SweetDialogHelper sdh = new SweetDialogHelper(this);
+        final SweetDialogHelper sdh = new SweetDialogHelper(this);
         // check if is online or not
         if (Util.isOnline(this) && apiService != null){
             Observable<CityResponseModel> cityObservable =
@@ -280,53 +281,92 @@ public class SearchActivity extends BaseActivity
             subscription1 = cityObservable
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(cityResponseModel -> {
-                        try {
-                            List<SpinnerModel> models = new ArrayList<>();
-                            models.add(new SpinnerModel("أختر محافظة", ""));
-                            models.addAll(1, cityResponseModel.getCities());
-                            populateSpinner1(models);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    .subscribe(new Subscriber<CityResponseModel>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
                             sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
                         }
-                        subscription1.unsubscribe();
+
+                        @Override
+                        public void onNext(CityResponseModel cityResponseModel) {
+                            try {
+                                List<SpinnerModel> models = new ArrayList<>();
+                                models.add(new SpinnerModel("أختر محافظة", ""));
+                                models.addAll(1, cityResponseModel.getCities());
+                                populateSpinner1(models);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                            }
+                            subscription1.unsubscribe();
+                        }
                     });
 
 
             subscription2 = priceObservable
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(priceResponse -> {
-                        try {
-                            List<SpinnerModel> models = new ArrayList<>();
-                            models = new ArrayList<>();
-                            models.add(new SpinnerModel("السعر", ""));
-                            models.addAll(1, priceResponse.getPrices());
-                            populateSpinner3(models);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    .subscribe(new Subscriber<PriceResponse>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
                             sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
                         }
-                        subscription2.unsubscribe();
+
+                        @Override
+                        public void onNext(PriceResponse priceResponse) {
+                            try {
+                                List<SpinnerModel> models = new ArrayList<>();
+                                models = new ArrayList<>();
+                                models.add(new SpinnerModel("السعر", ""));
+                                models.addAll(1, priceResponse.getPrices());
+                                populateSpinner3(models);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                            }
+                            subscription2.unsubscribe();
+                        }
                     });
 
 
             subscription3 = typesObservable
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe( typesResponseModel -> {
-                        try {
-                            List<SpinnerModel> models = new ArrayList<>();
-                            models = new ArrayList<>();
-                            models.add(new SpinnerModel("النوع", ""));
-                            models.addAll(1, typesResponseModel.getTypes());
-                            populateSpinner4(models);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    .subscribe(new Subscriber<TypesResponseModel>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
                             sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
                         }
-                        subscription3.unsubscribe();
+
+                        @Override
+                        public void onNext(TypesResponseModel typesResponseModel) {
+                            try {
+                                List<SpinnerModel> models = new ArrayList<>();
+                                models = new ArrayList<>();
+                                models.add(new SpinnerModel("النوع", ""));
+                                models.addAll(1, typesResponseModel.getTypes());
+                                populateSpinner4(models);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                            }
+                            subscription3.unsubscribe();
+                        }
                     });
 
 
@@ -336,7 +376,7 @@ public class SearchActivity extends BaseActivity
     }
 
     private void getArea(){
-        SweetDialogHelper sdh = new SweetDialogHelper(this);
+        final SweetDialogHelper sdh = new SweetDialogHelper(this);
 
         Observable<TownsResponseModel> townsObservable =
                 apiService.getTowns(Constants.TOKEN, city);
@@ -345,18 +385,31 @@ public class SearchActivity extends BaseActivity
         subscription4 = townsObservable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(townsResponseModel -> {
-                    try {
-                        List<SpinnerModel> models = new ArrayList<>();
-                        models = new ArrayList<>();
-                        models.add(new SpinnerModel("أختر منطقة", ""));
-                        models.addAll(1, townsResponseModel.getTowns());
-                        populateSpinner2(models);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                .subscribe(new Subscriber<TownsResponseModel>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
                         sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
                     }
-                    subscription4.unsubscribe();
+
+                    @Override
+                    public void onNext(TownsResponseModel townsResponseModel) {
+                        try {
+                            List<SpinnerModel> models = new ArrayList<>();
+                            models = new ArrayList<>();
+                            models.add(new SpinnerModel("أختر منطقة", ""));
+                            models.addAll(1, townsResponseModel.getTowns());
+                            populateSpinner2(models);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+                        subscription4.unsubscribe();
+                    }
                 });
     }
 }

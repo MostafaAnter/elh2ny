@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -160,23 +161,36 @@ public class CallUsActivity extends BaseActivity
                         subscription1 = contactObservable
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(contactResponse -> {
-                                    try {
-                                        sdh.dismissDialog();
-                                        if (contactResponse.getError().equalsIgnoreCase("false")){
-                                            sdh.showSuccessfulMessage("تم", "تم الارسال بنجاح", new SweetAlertDialog.OnSweetClickListener() {
-                                                @Override
-                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                    sweetAlertDialog.dismissWithAnimation();
-                                                    finish();
-                                                }
-                                            });
-                                        }
-                                    } catch (Exception e) {
-                                        sdh.dismissDialog();
-                                        e.printStackTrace();
+                                .subscribe(new Subscriber<ContactResponse>() {
+                                    @Override
+                                    public void onCompleted() {
+
                                     }
-                                    subscription1.unsubscribe();
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                                    }
+
+                                    @Override
+                                    public void onNext(ContactResponse contactResponse) {
+                                        try {
+                                            sdh.dismissDialog();
+                                            if (contactResponse.getError().equalsIgnoreCase("false")){
+                                                sdh.showSuccessfulMessage("تم", "تم الارسال بنجاح", new SweetAlertDialog.OnSweetClickListener() {
+                                                    @Override
+                                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                        sweetAlertDialog.dismissWithAnimation();
+                                                        finish();
+                                                    }
+                                                });
+                                            }
+                                        } catch (Exception e) {
+                                            sdh.dismissDialog();
+                                            e.printStackTrace();
+                                        }
+                                        subscription1.unsubscribe();
+                                    }
                                 });
                     }
                 }else {

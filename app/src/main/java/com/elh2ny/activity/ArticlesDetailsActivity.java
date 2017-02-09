@@ -83,7 +83,7 @@ public class ArticlesDetailsActivity extends AppCompatActivity {
 
 
 
-        byline.setText(Util.manipulateDateFormat(article.getCreatedAt()));
+        byline.setText(Util.manipulateDateFormat(article.getupdated_at()));
 
         body.setText(Html.fromHtml(article.getContent()));
 

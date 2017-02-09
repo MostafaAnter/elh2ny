@@ -114,7 +114,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             //change text font
             Util.changeViewTypeFace(mContext, "fonts/DroidKufi-Regular.ttf", viewHolder.getTextView1());
             viewHolder.getTextView1().setText(mDataSet.get(position).getTitle());
-            viewHolder.getTextView2().setText((Util.manipulateDateFormat(mDataSet.get(position).getCreatedAt())) +
+            viewHolder.getTextView2().setText((Util.manipulateDateFormat(mDataSet.get(position).getupdated_at())) +
             mDataSet.get(position).getDescription());
             // load thumbnail image :)
             Glide.with(mContext)

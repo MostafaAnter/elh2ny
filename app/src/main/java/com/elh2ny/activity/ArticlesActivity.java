@@ -36,6 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -144,7 +145,7 @@ public class ArticlesActivity extends BaseActivity
     }
 
     private void loadNextDataFromApi(int offset){
-        SweetDialogHelper sdh = new SweetDialogHelper(this);
+        final SweetDialogHelper sdh = new SweetDialogHelper(this);
         // check if is online or not
         if (Util.isOnline(this) && apiService != null){
             Observable<ArticlesResponse> articlesObservable =
@@ -152,17 +153,30 @@ public class ArticlesActivity extends BaseActivity
             subscription1 = articlesObservable
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(articlesResponse -> {
-                        try {
-                            mDataSet.addAll(mDataSet.size(), articlesResponse.getArticles().getData());
-                            mAdapter.notifyDataSetChanged();
-                            mSwipeRefresh.setRefreshing(false);
-                            noDataView.setVisibility(View.GONE);
-                            if (mDataSet.size() == 0)
-                                noDataView.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    .subscribe(new Subscriber<ArticlesResponse>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
                             sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                        }
+
+                        @Override
+                        public void onNext(ArticlesResponse articlesResponse) {
+                            try {
+                                mDataSet.addAll(mDataSet.size(), articlesResponse.getArticles().getData());
+                                mAdapter.notifyDataSetChanged();
+                                mSwipeRefresh.setRefreshing(false);
+                                noDataView.setVisibility(View.GONE);
+                                if (mDataSet.size() == 0)
+                                    noDataView.setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                sdh.showErrorMessage("عفواً", "قم بغلق الصفحة وأعادة فتحها");
+                            }
                         }
                     });
         }
