@@ -11,8 +11,11 @@ import com.elh2ny.model.sendRoomOrderResponse.OrderResponse;
 import com.elh2ny.model.townResponse.TownsResponseModel;
 import com.elh2ny.model.typesResponseModel.TypesResponseModel;
 
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -66,4 +69,8 @@ public interface ApiInterface {
     Observable<OrderResponse> getOrder(@Field("token") String token, @Field("title") String title,
                                        @Field("disease") String disease, @Field("point") String point,
                                        @Field("tel") String tel, @Field("id") String id, @Field("mail") String mail);
+
+    @GET("tel")
+    Observable<Response<ResponseBody>> getPhoneNumber();
+
 }

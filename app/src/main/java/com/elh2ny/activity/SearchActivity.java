@@ -153,6 +153,9 @@ public class SearchActivity extends BaseActivity
 
                     Log.d("debug_mostafa", selectedItem.getId());
 
+                }else {
+                    city = "";
+                    area = "";
                 }
             }
 
@@ -181,6 +184,8 @@ public class SearchActivity extends BaseActivity
                     // doSome things
                     area = selectedItem.getId();
                     Log.d("debug_mostafa", selectedItem.getId());
+                }else {
+                    area = "";
                 }
             }
 
@@ -209,6 +214,8 @@ public class SearchActivity extends BaseActivity
                     // doSome things
                     price = selectedItem.getPrice();
                     Log.d("debug_mostafa", selectedItem.getPrice());
+                }else {
+                    price = "";
                 }
             }
 
@@ -237,6 +244,8 @@ public class SearchActivity extends BaseActivity
                     // doSome things
                     type = selectedItem.getId();
                     Log.d("debug_mostafa", selectedItem.getId());
+                }else {
+                    type = "";
                 }
             }
 

@@ -274,7 +274,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="end|center_vertical"
-                            android:text="العنوان : أسيوط جامعة أسيوط مركز شبكة المعلومات الدور السادس \n موبايل: 010895000999"
+                            android:text="العنوان : جامعة أسيوط مركز شبكة المعلومات الدور السادس \n موبايل: "
                             android:textSize="12sp"
                             android:textAlignment="textStart"/>
                     </LinearLayout>

@@ -8,23 +8,33 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.elh2ny.R;
 import com.elh2ny.R2;
+import com.elh2ny.model.SpinnerModel;
 import com.elh2ny.model.contactUsResponseModel.ContactResponse;
 import com.elh2ny.model.sendRoomOrderResponse.OrderResponse;
+import com.elh2ny.model.townResponse.TownsResponseModel;
 import com.elh2ny.rest.ApiClient;
 import com.elh2ny.rest.ApiInterface;
 import com.elh2ny.utility.Constants;
 import com.elh2ny.utility.SweetDialogHelper;
 import com.elh2ny.utility.Util;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -69,9 +79,16 @@ public class CallUsActivity extends BaseActivity
     @BindView(R2.id.editText4)
     EditText editText4;
 
+    @Nullable
+    @BindView(R2.id.text15)
+    TextView textView15;
+
     private SweetDialogHelper sdh;
     private String title, subject, email, msg;
-    private static Subscription subscription1;
+    private static Subscription subscription1, subscription2;
+    private ApiInterface apiService;
+
+    private String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +108,9 @@ public class CallUsActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         changeFontOfNavigation();
 
+        // get apiService
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+
         // set focuse
         editText1.setOnFocusChangeListener(this);
         editText2.setOnFocusChangeListener(this);
@@ -102,6 +122,8 @@ public class CallUsActivity extends BaseActivity
         linear7.setOnClickListener(this);
 
         sdh = new SweetDialogHelper(this);
+
+        getPhoneNumber();
     }
 
     @Override
@@ -147,8 +169,12 @@ public class CallUsActivity extends BaseActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.linear7:
-                Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "010895000999"));
-                startActivity(callIntent);
+                if (phoneNumber != null) {
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
+                    startActivity(callIntent);
+                }else {
+                    sdh.showErrorMessage("أنتظر..", "حتى يتم تحميل رقم الهاتف");
+                }
                 break;
             case R.id.card_view1:
 
@@ -224,5 +250,37 @@ public class CallUsActivity extends BaseActivity
             return false;
         }
         return true;
+    }
+
+    private void getPhoneNumber(){
+        Observable<Response<ResponseBody>> phoneObservable =
+                apiService.getPhoneNumber();
+
+       subscription2 = phoneObservable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<ResponseBody>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Response<ResponseBody> responseBodyResponse) {
+                        try {
+                            textView15.append(responseBodyResponse.body().string());
+                            phoneNumber = responseBodyResponse.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        subscription2.unsubscribe();
+                    }
+                });
     }
 }

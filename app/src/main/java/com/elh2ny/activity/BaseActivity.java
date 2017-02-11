@@ -57,10 +57,19 @@ public class BaseActivity extends AppCompatActivity
     public void setToolbar() {
         Util.manipulateToolbar(this, toolbar, 0, null, true);
         ImageView backButton = (ImageView) toolbar.findViewById(R.id.back);
+        ImageView homeButton = (ImageView) toolbar.findViewById(R.id.home);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!this.getClass().getSimpleName().equalsIgnoreCase("SearchActivity")){
+                    startActivity(new Intent(BaseActivity.this, SearchActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                }
             }
         });
     }
