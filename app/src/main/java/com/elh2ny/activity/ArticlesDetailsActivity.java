@@ -26,6 +26,9 @@ import com.elh2ny.rest.ApiInterface;
 import com.elh2ny.utility.Constants;
 import com.elh2ny.utility.SweetDialogHelper;
 import com.elh2ny.utility.Util;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,9 @@ public class ArticlesDetailsActivity extends AppCompatActivity {
 
     private static Subscription subscription4;
     private ApiInterface apiService;
+
+
+    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +98,36 @@ public class ArticlesDetailsActivity extends AppCompatActivity {
 //        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
 //        AdRequest adRequest = new AdRequest.Builder().build();
 //        mAdView.loadAd(adRequest);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.bainy_ad_unit_id));
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                finish();
+            }
+        });
+
+        requestNewInterstitial();
+
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            finish();
+        }
     }
 
     private void bindData(){

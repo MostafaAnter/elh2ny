@@ -35,6 +35,9 @@ import com.elh2ny.rest.ApiInterface;
 import com.elh2ny.utility.Constants;
 import com.elh2ny.utility.SweetDialogHelper;
 import com.elh2ny.utility.Util;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.greenrobot.eventbus.EventBus;
@@ -130,6 +133,12 @@ public class SearchActivity extends BaseActivity
         getCitiesPriceTypies();
 
         FirebaseMessaging.getInstance().subscribeToTopic("elh2ny");
+
+
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 

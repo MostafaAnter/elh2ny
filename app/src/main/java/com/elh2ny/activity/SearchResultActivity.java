@@ -23,6 +23,11 @@ import com.elh2ny.rest.ApiInterface;
 import com.elh2ny.utility.Constants;
 import com.elh2ny.utility.SweetDialogHelper;
 import com.elh2ny.utility.Util;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -73,6 +78,8 @@ public class SearchResultActivity extends BaseActivity
     private static Subscription subscription1;
     private ApiInterface apiService;
 
+    InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +103,41 @@ public class SearchResultActivity extends BaseActivity
         // set recyclerView
         setRecyclerView(savedInstanceState);
 
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.bainy_ad_unit_id));
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                finish();
+            }
+        });
+
+        requestNewInterstitial();
+
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            finish();
+        }
     }
 
     private void setRecyclerView(Bundle savedInstanceState) {

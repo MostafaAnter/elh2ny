@@ -102,4 +102,7 @@
     </string>
     <string name="title_activity_advices">AdvicesActivity</string>
     <string name="title_activity_call_us">CallUsActivity</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-4624048839058210/5625659883</string>
+    <string name="bainy_ad_unit_id">ca-app-pub-4624048839058210/8579126282</string>
 </resources>

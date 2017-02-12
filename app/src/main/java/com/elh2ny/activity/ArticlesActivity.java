@@ -25,6 +25,9 @@ import com.elh2ny.utility.Constants;
 import com.elh2ny.utility.EndlessRecyclerViewScrollListener;
 import com.elh2ny.utility.SweetDialogHelper;
 import com.elh2ny.utility.Util;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -88,6 +91,11 @@ public class ArticlesActivity extends BaseActivity
         apiService = ApiClient.getClient().create(ApiInterface.class);
 
         onRefresh();
+
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 
