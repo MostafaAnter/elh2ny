@@ -68,7 +68,7 @@ public class BaseActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 if (!this.getClass().getSimpleName().equalsIgnoreCase("SearchActivity")){
-                    startActivity(new Intent(BaseActivity.this, SearchActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    startActivity(new Intent(BaseActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 }
             }
         });

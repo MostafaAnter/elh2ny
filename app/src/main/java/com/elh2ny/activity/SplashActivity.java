@@ -64,7 +64,7 @@ public class SplashActivity extends AppCompatActivity {
                                     startActivity(intent
                                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                                 } else {
-                                    startActivity(new Intent(SplashActivity.this, SearchActivity.class)
+                                    startActivity(new Intent(SplashActivity.this, MainActivity.class)
                                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                                 }
                             }

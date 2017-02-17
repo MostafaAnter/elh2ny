@@ -25,24 +25,24 @@
         </activity>
         <activity
             android:name=".activity.BaseActivity"
-            android:label="@string/title_activity_base"
             android:configChanges="screenSize|orientation"
+            android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SearchActivity"
-            android:label="@string/title_activity_search"
             android:configChanges="screenSize|orientation"
+            android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SearchResultActivity"
-            android:label="@string/title_activity_search_result"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             android:configChanges="screenSize|orientation"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_search_result"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activity.ArticlesActivity"
-            android:label="@string/title_activity_articles"
             android:configChanges="screenSize|orientation"
+            android:label="@string/title_activity_articles"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ArticlesDetailsActivity"
@@ -55,15 +55,15 @@
         </activity>
         <activity
             android:name=".activity.AdvicesActivity"
-            android:label="@string/title_activity_advices"
             android:configChanges="screenSize|orientation"
+            android:label="@string/title_activity_advices"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.CallUsActivity"
-            android:label="@string/title_activity_call_us"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             android:configChanges="screenSize|orientation"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/title_activity_call_us"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
         <!-- for network connection -->
 
@@ -75,7 +75,6 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-
 
         <!-- [START firebase_service] -->
         <service android:name=".notificationService.MyFirebaseMessagingService">
@@ -91,6 +90,10 @@
             </intent-filter>
         </service>
         <!-- [END firebase_iid_service] -->
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
